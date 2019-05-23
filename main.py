@@ -1,4 +1,4 @@
-from script import run
+from script import run, second_pass
 import sys
 
 if len(sys.argv) == 2:

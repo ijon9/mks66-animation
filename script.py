@@ -24,15 +24,18 @@ def first_pass( commands ):
     num_frames = 1
 
     for command in commands:
-        if command[0] == "frames":
-            num_frames = command[1]
-        elif command[0] == "basename":
-            name = command[1]
-        elif command[0] == "vary":
+        operation = command['op']
+        args = command['args']
+        if operation == "frames":
+            num_frames = args[0]
+        elif operation == "basename":
+            name = args[0]
+        elif operation == "vary":
             if num_frames == 1:
                 break
-            
-
+        elif num_frames != 1 and name == '':
+            name = 'NullName'
+            print("Resorting to default, NullName")
     return (name, num_frames)
 
 """======== second_pass( commands ) ==========
@@ -54,7 +57,19 @@ def first_pass( commands ):
   ===================="""
 def second_pass( commands, num_frames ):
     frames = [ {} for i in range(num_frames) ]
-
+    for command in commands:
+        operation = command['op']
+        args = command['args']
+        if operation == 'vary':
+            startFrame = args[0]
+            endFrame = args[1]
+            startValue = args[2]
+            endValue = args[3]
+            increment = (endValue - startValue) / num_frames
+            currValue = startValue
+            for i in range(startFrame, endFrame):
+                frames[i][command['knob']] = currValue
+                currValue += increment
     return frames
 
 
