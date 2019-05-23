@@ -61,6 +61,7 @@ def second_pass( commands, num_frames ):
         operation = command['op']
         args = command['args']
         if operation == 'vary':
+            knob = command['knob']
             startFrame = args[0]
             endFrame = args[1]
             startValue = args[2]
@@ -68,7 +69,7 @@ def second_pass( commands, num_frames ):
             increment = (endValue - startValue) / num_frames
             currValue = startValue
             for i in range(startFrame, endFrame):
-                frames[i][command['knob']] = currValue
+                frames[i][knob] = currValue
                 currValue += increment
     return frames
 
